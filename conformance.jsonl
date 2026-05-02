@@ -1,0 +1,18 @@
+{"step":1,"name":"create_alice","request":{"method":"POST","path":"/users","body":{"handle":"alice"}},"expected":{"status":201,"body":{"handle":"alice","id":1}}}
+{"step":2,"name":"create_bob","request":{"method":"POST","path":"/users","body":{"handle":"bob"}},"expected":{"status":201,"body":{"handle":"bob","id":2}}}
+{"step":3,"name":"create_carol","request":{"method":"POST","path":"/users","body":{"handle":"carol"}},"expected":{"status":201,"body":{"handle":"carol","id":3}}}
+{"step":4,"name":"reject_self_follow","request":{"method":"POST","path":"/follow","body":{"from":"alice","to":"alice"}},"expected":{"status":400,"body":{"error":"self_follow_forbidden"}}}
+{"step":5,"name":"alice_follows_bob","request":{"method":"POST","path":"/follow","body":{"from":"alice","to":"bob"}},"expected":{"status":204}}
+{"step":6,"name":"alice_follows_bob_idempotent","request":{"method":"POST","path":"/follow","body":{"from":"alice","to":"bob"}},"expected":{"status":204}}
+{"step":7,"name":"bob_posts_first","request":{"method":"POST","path":"/tweets","body":{"author":"bob","text":"hello world"}},"expected":{"status":201,"body":{"id":1,"author":"bob","text":"hello world","created_at":1}}}
+{"step":8,"name":"alice_timeline_sees_bob","request":{"method":"GET","path":"/timeline?user=alice"},"expected":{"status":200,"body":{"tweets":[{"id":1,"author":"bob","text":"hello world","created_at":1}],"next_cursor":null}}}
+{"step":9,"name":"carol_timeline_empty","request":{"method":"GET","path":"/timeline?user=carol"},"expected":{"status":200,"body":{"tweets":[],"next_cursor":null}}}
+{"step":10,"name":"carol_follows_bob_after_post","request":{"method":"POST","path":"/follow","body":{"from":"carol","to":"bob"}},"expected":{"status":204}}
+{"step":11,"name":"carol_timeline_sees_old_bob_tweet","request":{"method":"GET","path":"/timeline?user=carol"},"expected":{"status":200,"body":{"tweets":[{"id":1,"author":"bob","text":"hello world","created_at":1}],"next_cursor":null}}}
+{"step":12,"name":"bob_posts_second_same_clock","request":{"method":"POST","path":"/tweets","body":{"author":"bob","text":"second"}},"expected":{"status":201,"body":{"id":2,"author":"bob","text":"second","created_at":1}}}
+{"step":13,"name":"alice_timeline_orders_by_id_when_clock_ties","request":{"method":"GET","path":"/timeline?user=alice"},"expected":{"status":200,"body":{"tweets":[{"id":2,"author":"bob","text":"second","created_at":1},{"id":1,"author":"bob","text":"hello world","created_at":1}],"next_cursor":null}}}
+{"step":14,"name":"alice_unfollows_bob","request":{"method":"DELETE","path":"/follow","body":{"from":"alice","to":"bob"}},"expected":{"status":204}}
+{"step":15,"name":"alice_unfollows_bob_idempotent","request":{"method":"DELETE","path":"/follow","body":{"from":"alice","to":"bob"}},"expected":{"status":204}}
+{"step":16,"name":"alice_timeline_after_unfollow","request":{"method":"GET","path":"/timeline?user=alice"},"expected":{"status":200,"body":{"tweets":[],"next_cursor":null}}}
+{"step":17,"name":"reject_post_unknown_author","request":{"method":"POST","path":"/tweets","body":{"author":"eve","text":"hi"}},"expected":{"status":400,"body":{"error":"unknown_user"}}}
+{"step":18,"name":"reject_follow_unknown_target","request":{"method":"POST","path":"/follow","body":{"from":"alice","to":"eve"}},"expected":{"status":400,"body":{"error":"unknown_user"}}}

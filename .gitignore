@@ -1,0 +1,12 @@
+# TLA+ TLC scratch
+states/
+*.tlc
+MC_*.tla
+MC_*.cfg
+*_TTrace_*.tla
+
+# Editor
+.DS_Store
+*.swp
+.idea/
+.vscode/
