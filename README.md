@@ -40,8 +40,8 @@ See the parent plan for the full honest enumeration of what's verified vs truste
 | File | Purpose |
 |---|---|
 | `twitter.tla` | TLA+ module — state machine + invariants |
-| `twitter.cfg` | TLC configuration — bounded model (4 users, 6 tweets, 6 timestamps with ties allowed) |
-| `twitter-pr.cfg` | Smaller TLC bound for PR-time runs (4 users, 4 tweets, 4 timestamps) |
+| `twitter.cfg` | TLC configuration — bounded model (3 users, 5 tweets, 5 timestamps with ties allowed) |
+| `twitter-pr.cfg` | Smaller TLC bound for PR-time runs (3 users, 4 tweets, 4 timestamps) |
 | `conformance.jsonl` | Deterministic request/response pairs both impls must replay byte-identically |
 | `roadmap_medium.md` | Future scope: likes, replies, profiles |
 | `roadmap_full.md` | Future scope: search, retweets, notifications |
